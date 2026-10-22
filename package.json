@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kara0905/komamy-sdk.git"
+    "url": "git+https://github.com/Komamy-fr/komamy-typescript-sdk.git"
   },
   "homepage": "https://komamy.fr/api/docs",
   "scripts": {
