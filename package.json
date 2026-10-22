@@ -1,0 +1,54 @@
+{
+  "name": "komamy-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SDK TypeScript de l'API Komamy : toutes les opérations, typées depuis la spec OpenAPI.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.3"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./openapi.json": "./openapi/komamy.openapi.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "openapi"
+  ],
+  "keywords": [
+    "komamy",
+    "webcomics",
+    "manga",
+    "api",
+    "sdk",
+    "openapi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kara0905/komamy-sdk.git"
+  },
+  "homepage": "https://komamy.fr/api/docs",
+  "scripts": {
+    "sync-spec": "node scripts/sync-spec.mjs",
+    "check-spec": "node scripts/sync-spec.mjs --check",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "prepare": "tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.12"
+  }
+}
