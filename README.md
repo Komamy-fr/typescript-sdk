@@ -17,9 +17,9 @@ Les types et la liste des opérations sont générés depuis la spec OpenAPI du 
 Le paquet n'est pas encore publié sur npm. En attendant, depuis GitHub :
 
 ```sh
-bun add github:Komamy-fr/typescript-sdk
+bun add github:Komamy-fr/komamy-typescript-sdk
 # ou
-npm install github:Komamy-fr/typescript-sdk
+npm install github:Komamy-fr/komamy-typescript-sdk
 ```
 
 ## Accès
