@@ -1,0 +1,36 @@
+name: Publication npm
+
+# Publie le paquet sur npm à chaque release GitHub, par publication de confiance (OIDC) : aucun
+# jeton npm dans les secrets. Mise en place : README § « Publier une version ».
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # jeton OIDC pour npm (publication de confiance et provenance)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      # La publication de confiance demande npm 11.5.1 ou plus récent (Node 24 l'embarque).
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Le tag correspond à la version du paquet
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "::error::Release ${GITHUB_REF_NAME}, mais package.json est en ${version} : attendu le tag v${version}."
+            exit 1
+          fi
+      - run: bun install --frozen-lockfile
+      # `prepublishOnly` relance typecheck, tests et build avant l'envoi.
+      - run: npm publish

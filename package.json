@@ -1,5 +1,5 @@
 {
-  "name": "komamy-typescript-sdk",
+  "name": "@komamy/typescript-sdk",
   "version": "0.1.0",
   "description": "SDK TypeScript de l'API Komamy : toutes les opérations, typées depuis la spec OpenAPI.",
   "license": "Apache-2.0",
@@ -49,5 +49,12 @@
     "openapi-typescript": "^7.13.0",
     "typescript": "~5.9.3",
     "vitest": "^4.1.12"
+  },
+  "bugs": {
+    "url": "https://github.com/Komamy-fr/komamy-typescript-sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
