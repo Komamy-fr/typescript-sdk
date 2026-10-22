@@ -1,4 +1,4 @@
-# komamy-sdk
+# @komamy/typescript-sdk
 
 SDK TypeScript de l'**API de [Komamy](https://komamy.fr)** : les 549 opérations documentées sur
 [/api/docs](https://komamy.fr/api/docs), toutes typées, plus des raccourcis pour l'API publique
@@ -14,12 +14,10 @@ Les types et la liste des opérations sont générés depuis la spec OpenAPI du 
 
 ## Installation
 
-Le paquet n'est pas encore publié sur npm. En attendant, depuis GitHub :
-
 ```sh
-bun add github:Komamy-fr/komamy-typescript-sdk
+npm install @komamy/typescript-sdk
 # ou
-npm install github:Komamy-fr/komamy-typescript-sdk
+bun add @komamy/typescript-sdk
 ```
 
 ## Accès
@@ -125,7 +123,7 @@ L'éditeur affiche pour chaque méthode son résumé, sa route et sa politique d
 ### Raccourcis de l'API publique
 
 ```ts
-import { KomamyClient } from 'komamy-sdk';
+import { KomamyClient } from '@komamy/typescript-sdk';
 
 // Lit KOMAMY_API_KEY dans l'environnement si `apiKey` n'est pas passé.
 const komamy = new KomamyClient({ apiKey: process.env.KOMAMY_API_KEY });
@@ -155,7 +153,7 @@ Les types courants sont exportés (`Project`, `Chapter`, `Team`, `Author`, `Tag`
 et les aides `JsonResult<'operationId'>` / `JsonBody<'operationId'>` :
 
 ```ts
-import type { JsonResult } from 'komamy-sdk';
+import type { JsonResult } from '@komamy/typescript-sdk';
 type Me = JsonResult<'getAuthMe'>['user'];
 ```
 
@@ -192,7 +190,7 @@ rejouée : elle a pu être traitée.
 ### Erreurs
 
 ```ts
-import { KomamyApiError, KomamyTimeoutError, KomamyConnectionError } from 'komamy-sdk';
+import { KomamyApiError, KomamyTimeoutError, KomamyConnectionError } from '@komamy/typescript-sdk';
 
 try {
   await komamy.teams.get('inconnue');
@@ -250,3 +248,32 @@ bun run typecheck
 bun run test
 bun run build   # dist/
 ```
+
+## Publier une version
+
+La publication sur npm est automatique : `.github/workflows/publish.yml` publie le paquet quand une
+release est publiée sur GitHub, après vérification des types, tests et compilation. Il utilise la
+publication de confiance de npm (OIDC) : aucun jeton npm n'est stocké dans le dépôt, et chaque
+version porte une attestation de provenance qui la relie au commit et au workflow qui l'ont
+construite.
+
+1. Monter la version : `npm version patch` (ou `minor`, `major`), qui met à jour `package.json`
+   et crée le tag `vX.Y.Z` ; mettre `src/version.ts` à la même valeur (un test le vérifie).
+2. Pousser le commit et le tag : `git push --follow-tags`.
+3. Créer la release `vX.Y.Z` sur GitHub : le workflow publie, et refuse si le tag ne correspond
+   pas à la version de `package.json`.
+
+**Mise en place, une seule fois** : npm ne permet de déclarer une publication de confiance que
+sur un paquet qui existe déjà.
+
+1. Sur npmjs.com, créer l'organisation `komamy` (gratuite pour des paquets publics).
+2. Publier la première version à la main : `npm login`, puis `npm publish` depuis le dépôt.
+3. Sur la page du paquet, **Settings › Trusted publishing** : ajouter GitHub Actions avec le
+   propriétaire `Komamy-fr`, le dépôt `komamy-typescript-sdk`, le workflow `publish.yml` et l'environnement `npm`
+   (créé par GitHub au premier lancement ; on peut y exiger une approbation manuelle).
+4. Dans les mêmes réglages, choisir « Require two-factor authentication and disallow tokens » :
+   seules la publication de confiance et une personne avec 2FA peuvent alors publier.
+
+## Licence
+
+[Apache 2.0](LICENCE).
